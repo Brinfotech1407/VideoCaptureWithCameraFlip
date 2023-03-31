@@ -24,7 +24,6 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
   List<CameraDescription>? cameras;
   int? selectedCameraIdx;
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Map<String, bool> arrCheckedMap = <String, bool>{};
   Timer? countdownTimer;
   Duration myDuration = const Duration(seconds: 30);
@@ -288,12 +287,12 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
       child: GestureDetector(
         onTap: _onSwitchCamera,
         child: Padding(
-          padding: const EdgeInsets.only(right: 14, top: 40),
+          padding: const EdgeInsets.only(right: 14, top: 55),
           child: IconButton(
               onPressed: _onSwitchCamera,
               icon: Icon(_getCameraLensIcon(lensDirection)),
               color: Colors.white,
-              iconSize: 30),
+              iconSize: 35),
         ),
       ),
     );
@@ -319,8 +318,8 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
             color: controller != null &&
                     controller!.value.isInitialized &&
                     !controller!.value.isRecordingVideo
-                ? const Color.fromRGBO(213, 213, 213, 1)
-                : Colors.white,
+                ? const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5)
+                :Colors.red.withOpacity(0.5),
             width: 6,
           ),
           borderRadius: const BorderRadius.all(Radius.elliptical(67, 67)),
@@ -333,8 +332,8 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
               color: controller != null &&
                       controller!.value.isInitialized &&
                       !controller!.value.isRecordingVideo
-                  ? const Color.fromRGBO(213, 213, 213, 1)
-                  : Colors.white,
+                  ? const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5)
+                  : Colors.red.withOpacity(0.5),
               borderRadius: const BorderRadius.all(Radius.elliptical(47, 47)),
             )),
       ),
