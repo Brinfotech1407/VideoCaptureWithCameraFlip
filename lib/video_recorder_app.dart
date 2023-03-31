@@ -273,13 +273,16 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
 
     return Align(
       alignment: Alignment.topRight,
-      child: Padding(
-        padding: const EdgeInsets.only(right: 14, top: 40),
-        child: IconButton(
-            onPressed: _onSwitchCamera,
-            icon: Icon(_getCameraLensIcon(lensDirection)),
-            color: Colors.white,
-            iconSize: 30),
+      child: GestureDetector(
+        onTap: _onSwitchCamera,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 14, top: 40),
+          child: IconButton(
+              onPressed: _onSwitchCamera,
+              icon: Icon(_getCameraLensIcon(lensDirection)),
+              color: Colors.white,
+              iconSize: 30),
+        ),
       ),
     );
   }
