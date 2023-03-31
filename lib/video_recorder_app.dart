@@ -35,6 +35,10 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
   void initState() {
     super.initState();
     player = AudioPlayer();
+    player.playbackEventStream.listen((event) {},
+        onError: (Object e, StackTrace stackTrace) {
+      print('A stream error occurred: $e');
+    });
     WidgetsBinding.instance.addObserver(this);
 
     // Get the listonNewCameraSelected of available cameras.
@@ -130,7 +134,6 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
                     onClickListener: () async {
                       updateCheckView("Happy");
                       await player.setAsset('assets/audio/example.mp3');
-                      buildAudioPlayStop();
                     },
                   ),
                   bottomButton(
@@ -139,13 +142,13 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
                       onClickListener: () async {
                         updateCheckView("Summer");
                         await player.setAsset('assets/audio/waterfall.mp3');
-                        buildAudioPlayStop();
                       }),
                   bottomButton(
                       text: 'Bright',
                       imagePath: 'assets/sample_image.png',
-                      onClickListener: () {
+                      onClickListener: () async {
                         updateCheckView("Bright");
+                        await player.setAsset('assets/audio/smoke.mp3');
                       }),
                   bottomButton(
                       text: 'Lights',
@@ -199,19 +202,28 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
   }
 
   void buildAudioPlayStop() {
-    if (player.playing) {
-      player.stop();
-    } else {
-      player.play();
-    }
+    setState(() {
+      if (player.playing) {
+        player.stop();
+      } else {
+        player.play();
+      }
+    });
   }
 
   void updateCheckView(String key) {
     if (arrCheckedMap.containsKey(key)) {
       arrCheckedMap.clear();
+      player.stop();
     } else {
       arrCheckedMap.clear();
       arrCheckedMap[key] = true;
+      if(key=='Happy' || key == 'Summer' || key == 'Bright'){
+        player.play();
+      }else{
+        player.stop();
+      }
+
     }
     setState(() {});
   }
@@ -297,8 +309,7 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
             arrCheckedMap.isNotEmpty) {
           _onRecordButtonPressed();
           startTimer();
-        } else {
-        }
+        } else {}
       },
       child: Container(
         width: 67,
@@ -429,7 +440,7 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
       print('videoPath :: $videoPath');
       arrCheckedMap.clear();
       countdownTimer?.cancel();
-      buildAudioPlayStop();
+      player.stop();
       setState(() {});
     });
   }
@@ -491,7 +502,6 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
   void _showCameraException(CameraException e) {
     String errorText = 'Error: ${e.code}\nError Message: ${e.description}';
     print(errorText);
-
   }
 
   void stopRecordingAfter30Seconds() {
