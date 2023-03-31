@@ -305,13 +305,12 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
         width: 67,
         height: 67,
         decoration: BoxDecoration(
-          color: const Color.fromRGBO(217, 217, 217, 0),
           border: Border.all(
             color: controller != null &&
                     controller!.value.isInitialized &&
                     !controller!.value.isRecordingVideo
-                ? const Color.fromRGBO(217, 217, 217, 1)
-                : Colors.red,
+                ? const Color.fromRGBO(213, 213, 213, 1)
+                : Colors.white,
             width: 6,
           ),
           borderRadius: const BorderRadius.all(Radius.elliptical(67, 67)),
@@ -324,8 +323,8 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
               color: controller != null &&
                       controller!.value.isInitialized &&
                       !controller!.value.isRecordingVideo
-                  ? const Color.fromRGBO(217, 217, 217, 1)
-                  : Colors.red,
+                  ? const Color.fromRGBO(213, 213, 213, 1)
+                  : Colors.white,
               borderRadius: const BorderRadius.all(Radius.elliptical(47, 47)),
             )),
       ),
@@ -376,7 +375,7 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
   Future<void> _onCameraSwitched(CameraDescription cameraDescription) async {
-   /* if (controller != null) {
+    /* if (controller != null) {
       await controller!.dispose();
     }*/
 
