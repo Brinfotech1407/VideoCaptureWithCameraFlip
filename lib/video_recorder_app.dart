@@ -91,7 +91,7 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: <Widget>[
-          Container(
+          SizedBox(
             width: double.infinity,
             height: double.infinity,
             child: _cameraPreviewWidget(),
@@ -238,7 +238,7 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
       case CameraLensDirection.back:
         return Icons.flip_camera_android_outlined;
       case CameraLensDirection.front:
-        return Icons.flip;
+        return Icons.flip_camera_android_outlined;
       case CameraLensDirection.external:
         return Icons.camera;
       default:
@@ -274,7 +274,7 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
     return Align(
       alignment: Alignment.topRight,
       child: Padding(
-        padding: const EdgeInsets.only(right: 14, top: 16),
+        padding: const EdgeInsets.only(right: 14, top: 40),
         child: IconButton(
             onPressed: _onSwitchCamera,
             icon: Icon(_getCameraLensIcon(lensDirection)),
