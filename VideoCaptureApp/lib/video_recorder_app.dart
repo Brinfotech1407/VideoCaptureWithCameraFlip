@@ -29,6 +29,7 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
   Duration myDuration = const Duration(seconds: 30);
   late AudioPlayer player;
   bool isInitialized = false;
+  int isRecodingStart = 0;
 
   @override
   void initState() {
@@ -213,10 +214,12 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
   void updateCheckView(String key) {
     if (arrCheckedMap.containsKey(key)) {
       arrCheckedMap.clear();
+      isRecodingStart =0;
       player.stop();
     } else {
       arrCheckedMap.clear();
       arrCheckedMap[key] = true;
+      isRecodingStart = 1;
       if(key=='Happy' || key == 'Summer' || key == 'Bright'){
         player.play();
       }else{
@@ -287,7 +290,7 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
       child: GestureDetector(
         onTap: _onSwitchCamera,
         child: Padding(
-          padding: const EdgeInsets.only(right: 14, top: 55),
+          padding: const EdgeInsets.only(right: 14, top: 45),
           child: IconButton(
               onPressed: _onSwitchCamera,
               icon: Icon(_getCameraLensIcon(lensDirection)),
@@ -318,8 +321,8 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
             color: controller != null &&
                     controller!.value.isInitialized &&
                     !controller!.value.isRecordingVideo
-                ? const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5)
-                :Colors.red.withOpacity(0.5),
+                ?isRecodingStart == 0 ? const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5):Colors.white
+                :Colors.red,
             width: 6,
           ),
           borderRadius: const BorderRadius.all(Radius.elliptical(67, 67)),
@@ -332,8 +335,8 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
               color: controller != null &&
                       controller!.value.isInitialized &&
                       !controller!.value.isRecordingVideo
-                  ? const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5)
-                  : Colors.red.withOpacity(0.5),
+                  ? isRecodingStart == 0 ?const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5):Colors.white
+                  : Colors.red,
               borderRadius: const BorderRadius.all(Radius.elliptical(47, 47)),
             )),
       ),
@@ -439,6 +442,7 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
       print('videoPath :: $videoPath');
       arrCheckedMap.clear();
       countdownTimer?.cancel();
+      isRecodingStart =0;
       player.stop();
       setState(() {});
     });
