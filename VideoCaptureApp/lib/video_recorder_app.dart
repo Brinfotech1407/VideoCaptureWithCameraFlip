@@ -474,13 +474,17 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
     final String currentTime = DateTime.now().millisecondsSinceEpoch.toString();
     final String filePath = '$videoDirectory/${currentTime}.mp4';
 
+    final File videoFile = File('${(await getTemporaryDirectory()).path}/video.mp4');
+
+    print('temp filePath ${videoFile.path}');
+
     try {
       await controller!.startVideoRecording(
         onAvailable: (CameraImage image) {
           debugPrint('${image.planes}');
         },
       );
-      videoPath = filePath;
+      videoPath = videoFile.path;
     } on CameraException catch (e) {
       _showCameraException(e);
       return null;
