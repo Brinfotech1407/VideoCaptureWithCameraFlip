@@ -298,7 +298,6 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
           _onRecordButtonPressed();
           startTimer();
         } else {
-          showToastMessage("Please select Audio First");
         }
       },
       child: Container(
@@ -388,13 +387,7 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
       }
 
       if (controller!.value.hasError) {
-        Fluttertoast.showToast(
-            msg: 'Camera error ${controller!.value.errorDescription}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white);
+        print('Camera error${controller!.value.errorDescription}');
       }
     });
 
@@ -425,14 +418,6 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
   void _onRecordButtonPressed() {
     _startVideoRecording().then((String? filePath) {
       if (filePath != null) {
-        Fluttertoast.showToast(
-            msg: 'Recording video started',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.grey,
-            textColor: Colors.white);
-
         stopRecordingAfter30Seconds();
       }
     });
@@ -442,7 +427,6 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
     _stopVideoRecording().then((_) {
       if (mounted) setState(() {});
       print('videoPath :: $videoPath');
-      showToastMessage('Video recorded to $videoPath');
       arrCheckedMap.clear();
       countdownTimer?.cancel();
       buildAudioPlayStop();
@@ -462,14 +446,6 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
 
   Future<String?> _startVideoRecording() async {
     if (!controller!.value.isInitialized) {
-      Fluttertoast.showToast(
-          msg: 'Please wait',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.grey,
-          textColor: Colors.white);
-
       return null;
     }
 
@@ -516,13 +492,6 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
     String errorText = 'Error: ${e.code}\nError Message: ${e.description}';
     print(errorText);
 
-    Fluttertoast.showToast(
-        msg: 'Error: ${e.code}\n${e.description}',
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white);
   }
 
   void stopRecordingAfter30Seconds() {
