@@ -418,7 +418,7 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
         selectedCameraIdx! < cameras!.length - 1 ? selectedCameraIdx! + 1 : 0;
     CameraDescription selectedCamera = cameras![selectedCameraIdx!];
 
-    _onCameraSwitched(selectedCamera);
+    controller?.setDescription(selectedCamera);
 
     setState(() {
       selectedCameraIdx = selectedCameraIdx;
@@ -428,12 +428,12 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
   void _onRecordButtonPressed() {
     _startVideoRecording().then((String? filePath) {
       if (filePath != null) {
-        stopRecordingAfter30Seconds();
+        stopRecordingAfter30Seconds(filePath);
       }
     });
   }
 
-  void _onStopButtonPressed() {
+  void _onStopButtonPressed(String filePath) {
     _stopVideoRecording().then((_) {
       if (mounted) setState(() {});
       print('videoPath :: $videoPath');
@@ -503,9 +503,9 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
     print(errorText);
   }
 
-  void stopRecordingAfter30Seconds() {
+  void stopRecordingAfter30Seconds(String filePath) {
     Future.delayed(const Duration(seconds: 30), () {
-      _onStopButtonPressed();
+      _onStopButtonPressed(filePath);
     });
   }
 
