@@ -1,3 +1,4 @@
+/*
 import 'dart:async';
 import 'dart:io';
 
@@ -267,9 +268,11 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
         assetsAudioPlayer.play();
       }
 
-      /*if(assetsAudioPlayer.playlistFinished.value){
+      */
+/*if(assetsAudioPlayer.playlistFinished.value){
         assetsAudioPlayer.playlistPlayAtIndex()
-      }*/
+      }*//*
+
     });
   }
 
@@ -397,7 +400,8 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
       ),
     );
 
-    /*return Center(
+    */
+/*return Center(
       child: GestureDetector(
         onTap: controller != null &&
                 controller!.value.isInitialized &&
@@ -419,9 +423,11 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
           ),
         ),
       ),
-    );*/
+    );*//*
 
-    /*Row(
+
+    */
+/*Row(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
@@ -436,15 +442,18 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
               : null,
         )
       ],
-    );*/
+    );*//*
+
   }
 
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
   Future<void> _onCameraSwitched(CameraDescription cameraDescription) async {
-    /* if (controller != null) {
+    */
+/* if (controller != null) {
       await controller!.dispose();
-    }*/
+    }*//*
+
 
     controller = CameraController(cameraDescription, ResolutionPreset.high);
 
@@ -651,3 +660,4 @@ class VideoRecorderApp extends StatelessWidget {
     );
   }
 }
+*/

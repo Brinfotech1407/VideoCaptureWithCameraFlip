@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:video_recording_app/AudioPlayerWidet.dart';
 
 class VideoRecorderTempExample extends StatefulWidget {
   VideoRecorderTempExample(this.cameras, {super.key});
@@ -167,6 +168,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
               child: _captureControlRowWidget(),
             ),
           ),
+          AudioSelectors(),
         ],
       ),
     );

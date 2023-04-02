@@ -1,7 +1,6 @@
-import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 
 import 'audio_utils.dart';
 
@@ -12,29 +11,43 @@ class AudioSelectors extends StatefulWidget {
   _AudioSelectorsState createState() => _AudioSelectorsState();
 }
 
-class _AudioSelectorsState extends State<AudioSelectors> with WidgetsBindingObserver {
-
+class _AudioSelectorsState extends State<AudioSelectors>
+    with WidgetsBindingObserver {
   Map<String, bool> arrCheckedMap = <String, bool>{};
   bool isAudioPlay = false;
   final CarouselController _controller = CarouselController();
-
-  final assetsAudioPlayer = AssetsAudioPlayer();
+  late AudioPlayer player;
   int _currentTrackIndex = 0;
 
   void playAudio(int index) {
-    assetsAudioPlayer.playlistPlayAtIndex(index);
+    if(player.playing){
+      player.stop();
+    }
+    player.play();
+
+    player.setAsset(AudioUtils().musicTracks[index]);
+
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    intiAudioPlayer();
+  }
+
+  void intiAudioPlayer() {
+    player = AudioPlayer();
+    player.playbackEventStream.listen((event) {},
+        onError: (Object e, StackTrace stackTrace) {
+          print('A stream error occurred: $e');
+        });
   }
 
   @override
   void dispose() {
     super.dispose();
-    assetsAudioPlayer.dispose();
+    player.dispose();
   }
 
   @override
@@ -58,9 +71,8 @@ class _AudioSelectorsState extends State<AudioSelectors> with WidgetsBindingObse
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: _currentTrackIndex == index
-                    ? Colors.white
-                    : Colors.white30,
+                color:
+                    _currentTrackIndex == index ? Colors.white : Colors.white30,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -71,11 +83,10 @@ class _AudioSelectorsState extends State<AudioSelectors> with WidgetsBindingObse
                       margin: const EdgeInsets.only(left: 2, right: 2),
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage(
-                                AudioUtils().musicImage[index]),
+                            image: AssetImage(AudioUtils().musicImage[index]),
                             fit: BoxFit.cover),
-                        borderRadius: const BorderRadius.all(
-                            Radius.elliptical(25, 25)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.elliptical(25, 25)),
                       )),
                   SizedBox(
                     width: 70,
@@ -116,6 +127,4 @@ class _AudioSelectorsState extends State<AudioSelectors> with WidgetsBindingObse
     });
     playAudio(index);
   }
-
 }
-
