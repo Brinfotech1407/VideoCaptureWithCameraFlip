@@ -24,6 +24,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
   Duration myDuration = const Duration(seconds: 30);
   int selectedCamera = 0;
   bool isRecodingStart = false;
+  bool isShowCaptureButton =true;
 
   @override
   void initState() {
@@ -163,13 +164,18 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             ),
           ],
           Container(
-            margin: const EdgeInsets.only(bottom: 70.0),
+            margin: const EdgeInsets.only(bottom: 160),
             child: Padding(
               padding: const EdgeInsets.all(5.0),
               child: _captureControlRowWidget(),
             ),
           ),
-          AudioSelectors(isRecodingStart: isRecodingStart),
+          AudioSelectors(isRecodingStart: isRecodingStart,isAudioPreview: (value) {
+            setState(() {
+              isShowCaptureButton =value;
+            });
+
+          },),
         ],
       ),
     );
