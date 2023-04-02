@@ -5,7 +5,10 @@ import 'package:just_audio/just_audio.dart';
 import 'audio_utils.dart';
 
 class AudioSelectors extends StatefulWidget {
-  const AudioSelectors({Key? key}) : super(key: key);
+bool isRecodingStart = false;
+
+ AudioSelectors({super.key, required this.isRecodingStart});
+
 
   @override
   _AudioSelectorsState createState() => _AudioSelectorsState();
@@ -20,7 +23,10 @@ class _AudioSelectorsState extends State<AudioSelectors>
   int _currentTrackIndex = 0;
 
   void playAudio(int index) {
-    if(player.playing){
+    if(player.playing ){
+      player.stop();
+    }
+    if(widget.isRecodingStart == false){
       player.stop();
     }
     player.play();
@@ -116,6 +122,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
           onPageChanged: (index, reason) {
             _onItemChanged(index);
           },
+          autoPlay: false,
         ),
       ),
     );
@@ -125,6 +132,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
     setState(() {
       _currentTrackIndex = index;
     });
+
     playAudio(index);
   }
 }
