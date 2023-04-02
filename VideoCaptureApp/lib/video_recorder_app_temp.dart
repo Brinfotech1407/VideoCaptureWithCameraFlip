@@ -267,7 +267,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
           onVideoRecordButtonPressed();
           startTimer();
         } else {
-          onStopButtonPressed();
+          //onStopButtonPressed();
         }
       },
       child: Container(
@@ -351,6 +351,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
       if (file != null) {
         showInSnackBar('Video recorded to ${file.path}');
         videoFile = file;
+        myDuration = const Duration(seconds: 30);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => MediaUploadView(file.path)),
@@ -374,10 +375,17 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
 
     try {
       await cameraController.startVideoRecording();
+      stopRecordingAfter30Seconds();
     } on CameraException catch (e) {
       _showCameraException(e);
       return;
     }
+  }
+
+  void stopRecordingAfter30Seconds() {
+    Future.delayed(const Duration(seconds: 30), () {
+      onStopButtonPressed();
+    });
   }
 
   Future<XFile?> stopVideoRecording() async {
