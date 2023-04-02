@@ -43,6 +43,8 @@ dependencies:
   audioplayers: ^3.0.1
   just_audio: ^0.9.32
   video_player: ^2.6.0
+  carousel_slider: ^4.2.1
+  assets_audio_player: ^3.0.6
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +74,7 @@ flutter:
     - assets/Ellipse.png
     - assets/sample_image.png
     - assets/audio/
+    - assets/images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

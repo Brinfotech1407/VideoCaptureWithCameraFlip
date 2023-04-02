@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:camera/camera.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 
 class VideoRecorderExample extends StatefulWidget {
@@ -27,18 +28,67 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
   Map<String, bool> arrCheckedMap = <String, bool>{};
   Timer? countdownTimer;
   Duration myDuration = const Duration(seconds: 30);
-  late AudioPlayer player;
   bool isInitialized = false;
+
   int isRecodingStart = 0;
+  bool isAudioPlay = false;
+  final CarouselController _controller = CarouselController();
+
+  final assetsAudioPlayer = AssetsAudioPlayer();
+
+  List<String> musicTracks = [
+    'assets/audio/1.mp3',
+    'assets/audio/2.mp3',
+    'assets/audio/3.mp3',
+    'assets/audio/4.mp3',
+    'assets/audio/5.mp3',
+    'assets/audio/6.mp3',
+    'assets/audio/7.mp3',
+    'assets/audio/8.mp3',
+    'assets/audio/9.mp3',
+    'assets/audio/10.mp3',
+  ];
+  List<String> musicImage = [
+    'assets/images/1.png',
+    'assets/images/2.png',
+    'assets/images/3.png',
+    'assets/images/4.png',
+    'assets/images/5.png',
+    'assets/images/6.png',
+    'assets/images/7.png',
+    'assets/images/8.png',
+    'assets/images/9.png',
+    'assets/images/10png',
+  ];
+
+  List<String> musicTracksNames = [
+    ' Dark Trap Beat (It Follows You) - Alex Kizenkov',
+    ' Fun Life - FASSounds',
+    ' Snow - Dubdown',
+    'Danger - Monument Music',
+    'Boom Bap Hip-Hop - AlexiAction',
+    ' Extreme Trap - Playsound',
+    'Trap - The Mountain',
+    'Beat 3 - ENheee',
+    'Audio Pon - Magiksolo',
+    'Urban - lemonmusicstudio',
+  ];
+  int _currentTrackIndex = 0;
+
+  void playAudio(int index) {
+    final assetsAudioPlayer = AssetsAudioPlayer();
+
+    assetsAudioPlayer.open(
+      Audio(musicTracks[index]),
+    );
+
+    assetsAudioPlayer.play();
+  }
 
   @override
   void initState() {
     super.initState();
-    player = AudioPlayer();
-    player.playbackEventStream.listen((event) {},
-        onError: (Object e, StackTrace stackTrace) {
-      print('A stream error occurred: $e');
-    });
+
     WidgetsBinding.instance.addObserver(this);
 
     // Get the listonNewCameraSelected of available cameras.
@@ -78,7 +128,7 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
     _disposeCameraController();
 
     WidgetsBinding.instance.removeObserver(this);
-    player.dispose();
+    assetsAudioPlayer.dispose();
     super.dispose();
   }
 
@@ -123,76 +173,76 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(bottom: 25.0),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  bottomButton(
-                    text: 'Happy',
-                    imagePath: 'assets/Ellipse.png',
-                    onClickListener: () async {
-                      updateCheckView("Happy");
-                      await player.setAsset('assets/audio/example.mp3');
-                    },
+            color: Colors.transparent,
+            height: 60,
+            child: CarouselSlider.builder(
+              carouselController: _controller,
+              itemCount: musicTracks.length,
+              itemBuilder: (BuildContext context, int index, int realIndex) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isAudioPlay = true;
+                    });
+                    playAudio(index);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: _currentTrackIndex == index
+                          ? Colors.white
+                          : Colors.white30,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                            width: 23,
+                            height: 23,
+                            margin: const EdgeInsets.only(left: 2, right: 2),
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage(musicImage[index]),
+                                  fit: BoxFit.cover),
+                              borderRadius: const BorderRadius.all(
+                                  Radius.elliptical(25, 25)),
+                            )),
+                        SizedBox(
+                          width: 70,
+                          child: Text(
+                            musicTracksNames[index],
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              overflow: TextOverflow.ellipsis,
+                              color: _currentTrackIndex == index
+                                  ? Colors.black
+                                  : Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  bottomButton(
-                      text: 'Summer',
-                      imagePath: 'assets/sample_image.png',
-                      onClickListener: () async {
-                        updateCheckView("Summer");
-                        await player.setAsset('assets/audio/waterfall.mp3');
-                      }),
-                  bottomButton(
-                      text: 'Bright',
-                      imagePath: 'assets/sample_image.png',
-                      onClickListener: () async {
-                        updateCheckView("Bright");
-                        await player.setAsset('assets/audio/smoke.mp3');
-                      }),
-                  bottomButton(
-                      text: 'Lights',
-                      imagePath: 'assets/Ellipse.png',
-                      onClickListener: () {
-                        updateCheckView("Lights");
-                      }),
-                  bottomButton(
-                      text: 'Dancing',
-                      imagePath: 'assets/sample_image.png',
-                      onClickListener: () {
-                        updateCheckView("Dancing");
-                      }),
-                  bottomButton(
-                      text: 'Butter',
-                      imagePath: 'assets/Ellipse.png',
-                      onClickListener: () {
-                        updateCheckView("Butter");
-                      }),
-                  bottomButton(
-                      text: 'Mood',
-                      imagePath: 'assets/Ellipse.png',
-                      onClickListener: () {
-                        updateCheckView("Mood");
-                      }),
-                  bottomButton(
-                      text: 'Blinding Lights',
-                      imagePath: 'assets/sample_image.png',
-                      onClickListener: () {
-                        updateCheckView("Blinding Lights");
-                      }),
-                  bottomButton(
-                      text: 'Good',
-                      imagePath: 'assets/Ellipse.png',
-                      onClickListener: () {
-                        updateCheckView("Good");
-                      }),
-                  bottomButton(
-                      text: 'music',
-                      imagePath: 'assets/sample_image.png',
-                      onClickListener: () {
-                        updateCheckView("music");
-                      }),
-                ],
+                );
+              },
+              options: CarouselOptions(
+                height: 40,
+                viewportFraction: 0.3,
+                initialPage: _currentTrackIndex,
+                enableInfiniteScroll: false,
+                onScrolled: (value) {
+                  assetsAudioPlayer
+                      .seek(Duration(milliseconds: value!.toInt()));
+                  if (!assetsAudioPlayer.isPlaying.value) {
+                    assetsAudioPlayer.play();
+                  }
+                },
+                onPageChanged: (index, reason) {
+                  _onItemChanged(index);
+                },
               ),
             ),
           ),
@@ -200,32 +250,36 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
       ),
     );
   }
+  void _onItemChanged(int index) {
+    setState(() {
+      _currentTrackIndex = index;
+    });
+
+
+  }
 
   void buildAudioPlayStop() {
     setState(() {
-      if (player.playing) {
-        player.stop();
+      if(assetsAudioPlayer.isPlaying.value) {
+        assetsAudioPlayer.stop();
       } else {
-        player.play();
+        assetsAudioPlayer.play();
       }
+
+      /*if(assetsAudioPlayer.playlistFinished.value){
+        assetsAudioPlayer.playlistPlayAtIndex()
+      }*/
     });
   }
 
   void updateCheckView(String key) {
     if (arrCheckedMap.containsKey(key)) {
       arrCheckedMap.clear();
-      isRecodingStart =0;
-      player.stop();
+      isRecodingStart = 0;
     } else {
       arrCheckedMap.clear();
       arrCheckedMap[key] = true;
       isRecodingStart = 1;
-      if(key=='Happy' || key == 'Summer' || key == 'Bright'){
-        player.play();
-      }else{
-        player.stop();
-      }
-
     }
     setState(() {});
   }
@@ -319,8 +373,8 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
         decoration: BoxDecoration(
           border: Border.all(
             color: controller != null &&
-                    controller!.value.isInitialized &&
-                    !controller!.value.isRecordingVideo
+                controller!.value.isInitialized &&
+                !controller!.value.isRecordingVideo
                 ?isRecodingStart == 0 ? const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5):Colors.white
                 :Colors.red,
             width: 6,
@@ -333,8 +387,8 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
             margin: const EdgeInsets.all(3),
             decoration: BoxDecoration(
               color: controller != null &&
-                      controller!.value.isInitialized &&
-                      !controller!.value.isRecordingVideo
+                  controller!.value.isInitialized &&
+                  !controller!.value.isRecordingVideo
                   ? isRecodingStart == 0 ?const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5):Colors.white
                   : Colors.red,
               borderRadius: const BorderRadius.all(Radius.elliptical(47, 47)),
@@ -418,7 +472,7 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
 
   void _onSwitchCamera() {
     selectedCameraIdx =
-        selectedCameraIdx! < cameras!.length - 1 ? selectedCameraIdx! + 1 : 0;
+    selectedCameraIdx! < cameras!.length - 1 ? selectedCameraIdx! + 1 : 0;
     CameraDescription selectedCamera = cameras![selectedCameraIdx!];
 
     controller?.setDescription(selectedCamera);
@@ -442,8 +496,8 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
       print('videoPath :: $videoPath');
       arrCheckedMap.clear();
       countdownTimer?.cancel();
-      isRecodingStart =0;
-      player.stop();
+      isRecodingStart = 0;
+      assetsAudioPlayer.stop();
       setState(() {});
     });
   }
@@ -474,7 +528,8 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
     final String currentTime = DateTime.now().millisecondsSinceEpoch.toString();
     final String filePath = '$videoDirectory/${currentTime}.mp4';
 
-    final File videoFile = File('${(await getTemporaryDirectory()).path}/video.mp4');
+    final File videoFile =
+    File('${(await getTemporaryDirectory()).path}/video.mp4');
 
     print('temp filePath ${videoFile.path}');
 
@@ -519,8 +574,8 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
 
   Widget bottomButton(
       {required String text,
-      required Function() onClickListener,
-      required String imagePath}) {
+        required Function() onClickListener,
+        required String imagePath}) {
     return GestureDetector(
       onTap: onClickListener,
       child: Container(
@@ -548,7 +603,7 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
                   image: DecorationImage(
                       image: AssetImage(imagePath), fit: BoxFit.cover),
                   borderRadius:
-                      const BorderRadius.all(Radius.elliptical(25, 25)),
+                  const BorderRadius.all(Radius.elliptical(25, 25)),
                 )),
             Padding(
               padding: const EdgeInsets.only(left: 2.0),
