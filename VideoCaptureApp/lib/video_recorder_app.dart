@@ -251,6 +251,7 @@ class _VideoRecorderExampleState extends State<VideoRecorderExample>
     );
   }
   void _onItemChanged(int index) {
+
     setState(() {
       _currentTrackIndex = index;
     });
