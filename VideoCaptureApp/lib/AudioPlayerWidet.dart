@@ -8,7 +8,8 @@ class AudioSelectors extends StatefulWidget {
   bool isRecodingStart = false;
   Function(bool) isAudioPreview;
 
-  AudioSelectors({super.key, required this.isRecodingStart,required this.isAudioPreview});
+  AudioSelectors(
+      {super.key, required this.isRecodingStart, required this.isAudioPreview});
 
   @override
   _AudioSelectorsState createState() => _AudioSelectorsState();
@@ -24,13 +25,15 @@ class _AudioSelectorsState extends State<AudioSelectors>
 
   void playAudio(int index) {
     if (player.playing) {
+      widget.isAudioPreview(false);
       player.stop();
     }
     if (widget.isRecodingStart == false) {
+      widget.isAudioPreview(false);
       player.stop();
     }
     player.play();
-
+    widget.isAudioPreview(true);
     player.setAsset(AudioUtils().musicTracks[index]);
   }
 
@@ -60,8 +63,10 @@ class _AudioSelectorsState extends State<AudioSelectors>
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        if(player.playing)...<Widget>[
+        if (player.playing) ...<Widget>[
           audioPreviewWidget(),
+        ] else ...<Widget>[
+          const SizedBox(height: 0,width: 0),
         ],
         Container(
           color: Colors.transparent,
@@ -139,49 +144,53 @@ class _AudioSelectorsState extends State<AudioSelectors>
 
   Container audioPreviewWidget() {
     return Container(
-        margin: const EdgeInsets.only(left: 8,right: 8),
-        padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.white30,
-        ),
-        height: 100,
-        child: Row(
-          children: [
-            Container(
-                width: 45,
-                height: 45,
-                margin: const EdgeInsets.only(left: 2, right: 2),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(
-                          AudioUtils().musicImage[_currentTrackIndex]),
-                      fit: BoxFit.cover),
-                  borderRadius:
-                      const BorderRadius.all(Radius.elliptical(25, 25)),
-                )),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                AudioUtils().musicTracksNames[_currentTrackIndex],
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.white),
-              ),
+      margin: const EdgeInsets.only(left: 8, right: 8),
+      padding: const EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white30,
+      ),
+      height: 100,
+      child: Row(
+        children: [
+          Container(
+              width: 45,
+              height: 45,
+              margin: const EdgeInsets.only(left: 2, right: 2),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image:
+                        AssetImage(AudioUtils().musicImage[_currentTrackIndex]),
+                    fit: BoxFit.cover),
+                borderRadius: const BorderRadius.all(Radius.elliptical(25, 25)),
+              )),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              AudioUtils().musicTracksNames[_currentTrackIndex],
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Colors.white),
             ),
-            IconButton(
-                onPressed: () {
-                  setState(() {
-                    player.stop();
+          ),
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  if (widget.isRecodingStart == false) {
                     widget.isAudioPreview(false);
-                  });
-
-                },
-                icon: Icon(Icons.close,color: Colors.white,size: 27,)),
-          ],
-        ),
-      );
+                    player.stop();
+                  }
+                });
+              },
+              icon: const Icon(
+                Icons.close,
+                color: Colors.white,
+                size: 27,
+              )),
+        ],
+      ),
+    );
   }
 
   void _onItemChanged(int index) {

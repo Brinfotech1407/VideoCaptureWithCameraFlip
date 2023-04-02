@@ -25,7 +25,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
   Duration myDuration = const Duration(seconds: 30);
   int selectedCamera = 0;
   bool isRecodingStart = false;
-  bool isShowCaptureButton =true;
+  bool isChangedSizesOfViews = true;
 
   @override
   void initState() {
@@ -154,7 +154,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
               controller!.value.isInitialized &&
               controller!.value.isRecordingVideo) ...<Widget>[
             Container(
-              margin: const EdgeInsets.only(bottom: 155.0),
+              margin:  EdgeInsets.only(bottom:isChangedSizesOfViews ?250 : 155.0),
               child: Text(
                 '$minutes:$seconds',
                 style: const TextStyle(
@@ -165,18 +165,20 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             ),
           ],
           Container(
-            margin: const EdgeInsets.only(bottom: 160),
+            margin: EdgeInsets.only(bottom: isChangedSizesOfViews ? 160 : 70),
             child: Padding(
               padding: const EdgeInsets.all(5.0),
               child: _captureControlRowWidget(),
             ),
           ),
-          AudioSelectors(isRecodingStart: isRecodingStart,isAudioPreview: (value) {
-            setState(() {
-              isShowCaptureButton =value;
-            });
-
-          },),
+          AudioSelectors(
+            isRecodingStart: isRecodingStart,
+            isAudioPreview: (value) {
+              setState(() {
+                isChangedSizesOfViews = value;
+              });
+            },
+          ),
         ],
       ),
     );
@@ -285,7 +287,9 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             color: controller != null &&
                     controller!.value.isInitialized &&
                     !controller!.value.isRecordingVideo
-                ? isRecodingStart ? Colors.white :const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5)
+                ? isRecodingStart
+                    ? Colors.white
+                    : const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5)
                 : Colors.red,
             width: 6,
           ),
@@ -299,13 +303,14 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
               color: controller != null &&
                       controller!.value.isInitialized &&
                       !controller!.value.isRecordingVideo
-                  ? isRecodingStart ? Colors.white :const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5)
+                  ? isRecodingStart
+                      ? Colors.white
+                      : const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5)
                   : Colors.red,
               borderRadius: const BorderRadius.all(Radius.elliptical(47, 47)),
             )),
       ),
     );
-
   }
 
   void startTimer() {
@@ -351,7 +356,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
 
   void onStopButtonPressed() {
     countdownTimer?.cancel();
-    isRecodingStart =false;
+    isRecodingStart = false;
     stopVideoRecording().then((XFile? file) {
       if (mounted) {
         setState(() {});
@@ -426,7 +431,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
           onNewCameraSelected(cameraDescription);
         }
       }
-    }else{
+    } else {
       for (final CameraDescription cameraDescription in widget.cameras) {
         if (cameraDescription.lensDirection == CameraLensDirection.front) {
           onNewCameraSelected(cameraDescription);
