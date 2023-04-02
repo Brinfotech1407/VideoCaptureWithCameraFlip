@@ -24,6 +24,8 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
   Timer? countdownTimer;
   Duration myDuration = const Duration(seconds: 30);
   int selectedCamera = 0;
+  bool isRecodingStart = false;
+  bool isShowCaptureButton =true;
 
   @override
   void initState() {
@@ -163,13 +165,18 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             ),
           ],
           Container(
-            margin: const EdgeInsets.only(bottom: 70.0),
+            margin: const EdgeInsets.only(bottom: 160),
             child: Padding(
               padding: const EdgeInsets.all(5.0),
               child: _captureControlRowWidget(),
             ),
           ),
-          AudioSelectors(),
+          AudioSelectors(isRecodingStart: isRecodingStart,isAudioPreview: (value) {
+            setState(() {
+              isShowCaptureButton =value;
+            });
+
+          },),
         ],
       ),
     );
@@ -278,7 +285,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             color: controller != null &&
                     controller!.value.isInitialized &&
                     !controller!.value.isRecordingVideo
-                ? Colors.white
+                ? isRecodingStart ? Colors.white :const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5)
                 : Colors.red,
             width: 6,
           ),
@@ -292,7 +299,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
               color: controller != null &&
                       controller!.value.isInitialized &&
                       !controller!.value.isRecordingVideo
-                  ? Colors.white
+                  ? isRecodingStart ? Colors.white :const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5)
                   : Colors.red,
               borderRadius: const BorderRadius.all(Radius.elliptical(47, 47)),
             )),
@@ -344,6 +351,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
 
   void onStopButtonPressed() {
     countdownTimer?.cancel();
+    isRecodingStart =false;
     stopVideoRecording().then((XFile? file) {
       if (mounted) {
         setState(() {});
@@ -362,7 +370,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
 
   Future<void> startVideoRecording() async {
     final CameraController? cameraController = controller;
-
+    isRecodingStart = true;
     if (cameraController == null || !cameraController.value.isInitialized) {
       showInSnackBar('Error: select a camera first.');
       return;
