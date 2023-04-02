@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:video_recording_app/AudioPlayerWidet.dart';
+import 'package:video_recording_app/upload/upload_media.dart';
 
 class VideoRecorderTempExample extends StatefulWidget {
   VideoRecorderTempExample(this.cameras, {super.key});
@@ -350,6 +351,10 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
       if (file != null) {
         showInSnackBar('Video recorded to ${file.path}');
         videoFile = file;
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MediaUploadView(file.path)),
+        );
       }
     });
   }
