@@ -48,8 +48,21 @@ class _AudioSelectorsState extends State<AudioSelectors>
   void initState() {
     // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     intiAudioPlayer();
     widget.player(player);
+
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
+      _currentTrackIndex =0;
+      player.stop();
+      player.dispose();
+    }else if (state == AppLifecycleState.resumed) {
+      intiAudioPlayer();
+    }
   }
 
   Future<void> intiAudioPlayer() async {
@@ -67,6 +80,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
   @override
   void dispose() {
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     player.dispose();
   }
 
