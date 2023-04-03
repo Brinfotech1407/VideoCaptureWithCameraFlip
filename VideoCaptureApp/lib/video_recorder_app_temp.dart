@@ -25,7 +25,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
   Duration myDuration = const Duration(seconds: 30);
   int selectedCamera = 0;
   bool isRecodingStart = false;
-  bool isChangedSizesOfViews = true;
+  bool isMusicPlaying = true;
 
   @override
   void initState() {
@@ -154,7 +154,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
               controller!.value.isInitialized &&
               controller!.value.isRecordingVideo) ...<Widget>[
             Container(
-              margin:  EdgeInsets.only(bottom:isChangedSizesOfViews ?250 : 155.0),
+              margin:  const EdgeInsets.only(bottom:155.0),
               child: Text(
                 '$minutes:$seconds',
                 style: const TextStyle(
@@ -165,7 +165,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             ),
           ],
           Container(
-            margin: EdgeInsets.only(bottom: isChangedSizesOfViews ? 160 : 70),
+            margin: const EdgeInsets.only(bottom:70),
             child: Padding(
               padding: const EdgeInsets.all(5.0),
               child: _captureControlRowWidget(),
@@ -175,7 +175,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             isRecodingStart: isRecodingStart,
             isAudioPreview: (value) {
               setState(() {
-                isChangedSizesOfViews = value;
+                isMusicPlaying = value;
               });
             },
           ),

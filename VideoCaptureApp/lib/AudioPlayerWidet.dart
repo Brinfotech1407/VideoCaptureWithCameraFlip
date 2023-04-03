@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:marquee/marquee.dart';
 
 import 'audio_utils.dart';
 
@@ -63,11 +64,6 @@ class _AudioSelectorsState extends State<AudioSelectors>
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        if (player.playing) ...<Widget>[
-          audioPreviewWidget(),
-        ] else ...<Widget>[
-          const SizedBox(height: 0,width: 0),
-        ],
         Container(
           color: Colors.transparent,
           height: 60,
@@ -106,20 +102,30 @@ class _AudioSelectorsState extends State<AudioSelectors>
                             borderRadius: const BorderRadius.all(
                                 Radius.elliptical(25, 25)),
                           )),
-                      SizedBox(
-                        width: 70,
-                        child: Text(
-                          AudioUtils().musicTracksNames[index],
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.ellipsis,
-                            color: _currentTrackIndex == index
-                                ? Colors.black
-                                : Colors.white,
+                      if (player.playing && _currentTrackIndex == index) ...[
+                        SizedBox(
+                          width: 70,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 5.0,left: 1),
+                            child: Marquee(
+                              text: AudioUtils().musicTracksNames[index],
+                              style: buildMusicNameStyle(index),
+                              scrollAxis: Axis.horizontal,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              accelerationCurve: Curves.linear,
+                              decelerationCurve: Curves.easeInOut,
+                            ),
+                          ),
+                        )
+                      ] else ...[
+                        SizedBox(
+                          width: 70,
+                          child: Text(
+                            AudioUtils().musicTracksNames[index],
+                            style: buildMusicNameStyle(index),
                           ),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 ),
@@ -142,54 +148,12 @@ class _AudioSelectorsState extends State<AudioSelectors>
     );
   }
 
-  Container audioPreviewWidget() {
-    return Container(
-      margin: const EdgeInsets.only(left: 8, right: 8),
-      padding: const EdgeInsets.all(6),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.white30,
-      ),
-      height: 100,
-      child: Row(
-        children: [
-          Container(
-              width: 45,
-              height: 45,
-              margin: const EdgeInsets.only(left: 2, right: 2),
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image:
-                        AssetImage(AudioUtils().musicImage[_currentTrackIndex]),
-                    fit: BoxFit.cover),
-                borderRadius: const BorderRadius.all(Radius.elliptical(25, 25)),
-              )),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              AudioUtils().musicTracksNames[_currentTrackIndex],
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Colors.white),
-            ),
-          ),
-          IconButton(
-              onPressed: () {
-                setState(() {
-                  if (widget.isRecodingStart == false) {
-                    widget.isAudioPreview(false);
-                    player.stop();
-                  }
-                });
-              },
-              icon: const Icon(
-                Icons.close,
-                color: Colors.white,
-                size: 27,
-              )),
-        ],
-      ),
+  TextStyle buildMusicNameStyle(int index) {
+    return TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.bold,
+      overflow: TextOverflow.ellipsis,
+      color: _currentTrackIndex == index ? Colors.black : Colors.white,
     );
   }
 
