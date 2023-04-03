@@ -14,7 +14,7 @@ class AudioUtils {
   ];
 
   List<String> musicImage = [
-    'assets/images/1.png',
+    'assets/images/none.png',
     'assets/images/1.png',
     'assets/images/2.png',
     'assets/images/3.png',
