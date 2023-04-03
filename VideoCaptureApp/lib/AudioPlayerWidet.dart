@@ -34,9 +34,11 @@ class _AudioSelectorsState extends State<AudioSelectors>
       widget.isAudioPreview(false);
       player.stop();
     }
-    player.play();
+    if (index != 0) {
+      player.play();
     widget.isAudioPreview(true);
-    player.setAsset(AudioUtils().musicTracks[index]);
+      player.setAsset(AudioUtils().musicTracks[index]);
+    }
   }
 
   @override
@@ -47,12 +49,16 @@ class _AudioSelectorsState extends State<AudioSelectors>
     widget.player(player);
   }
 
-  void intiAudioPlayer() {
+  Future<void> intiAudioPlayer() async {
     player = AudioPlayer();
-    player.playbackEventStream.listen((event) {},
-        onError: (Object e, StackTrace stackTrace) {
-      print('A stream error occurred: $e');
-    });
+    await player.setLoopMode(LoopMode.all);
+    player.playbackEventStream.listen(
+      (PlaybackEvent event) {},
+      onError: (Object e, StackTrace stackTrace) {
+        print('A stream error occurred: $e');
+      },
+      onDone: () {},
+    );
   }
 
   @override
