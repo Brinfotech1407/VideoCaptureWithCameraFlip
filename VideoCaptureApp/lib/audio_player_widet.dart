@@ -184,8 +184,4 @@ class _AudioSelectorsState extends State<AudioSelectors>
     playAudio(index);
   }
 
-  uncheckCurrentView() {
-    _currentTrackIndex = 0;
-    playAudio(0);
-  }
 }
