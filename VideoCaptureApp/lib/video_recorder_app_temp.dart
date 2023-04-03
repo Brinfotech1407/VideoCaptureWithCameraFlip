@@ -409,9 +409,9 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
   }
 
   void onStopButtonPressed() {
+    player.stop();
     countdownTimer?.cancel();
     stopVideoTimer?.cancel();
-    player.stop();
     isRecodingStart = false;
     stopVideoRecording().then((XFile? file) {
       if (mounted) {
@@ -421,8 +421,9 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
         showInSnackBar('Video recorded to ${file.path}');
         videoFile = file;
         myDuration = const Duration(seconds: 30);
-        uploadProgress.value = "0";
         player.stop();
+        uploadProgress.value = "0";
+
         /*Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => MediaUploadView(file.path)),
