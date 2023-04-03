@@ -159,12 +159,13 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             height: double.infinity,
             child: _cameraPreviewWidget(),
           ),
-          ValueListenableBuilder(valueListenable: uploadProgress,
-              builder: (context, value, child) {
-                if (value == '100.00') {
-                  return const SizedBox();
-                } else {
-                if (videoFile != null && videoFile!.path.isNotEmpty) {
+          ValueListenableBuilder(
+            valueListenable: uploadProgress,
+            builder: (context, value, child) {
+              if (value == '100.00') {
+                return const SizedBox();
+              } else {
+                if (value == '0') {
                   return Align(
                     alignment: Alignment.topLeft,
                     child: Container(
@@ -182,11 +183,10 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
                         )),
                   );
                 }
-                }
-                return const SizedBox();
-              },
+              }
+              return const SizedBox();
+            },
           ),
-
           _cameraTogglesRowWidget(),
           if (controller != null &&
               controller!.value.isInitialized &&
@@ -416,6 +416,8 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
         showInSnackBar('Video recorded to ${file.path}');
         videoFile = file;
         myDuration = const Duration(seconds: 30);
+        uploadProgress.value = "0";
+        player.stop();
         /*Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => MediaUploadView(file.path)),

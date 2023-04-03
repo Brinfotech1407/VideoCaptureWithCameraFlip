@@ -48,9 +48,12 @@ class _MediaUploadViewState extends State<MediaUploadView> {
     if (task == null) return;
 
     final snapshot = await task!.whenComplete(() {});
+
     final urlDownload = await snapshot.ref.getDownloadURL();
 
     print('Download-Link: $urlDownload');
+    widget.uploadProgress('100.00');
+
   }
 
   Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
@@ -60,8 +63,6 @@ class _MediaUploadViewState extends State<MediaUploadView> {
             final snap = snapshot.data!;
             final progress = snap.bytesTransferred / snap.totalBytes;
             final  percentage = (progress * 100).toStringAsFixed(2);
-
-            widget.uploadProgress(percentage);
 
             return Column(
               children: [
