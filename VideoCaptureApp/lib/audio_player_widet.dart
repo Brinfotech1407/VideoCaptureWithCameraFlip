@@ -6,7 +6,7 @@ import 'package:marquee/marquee.dart';
 import 'audio_utils.dart';
 
 class AudioSelectors extends StatefulWidget {
-  bool isRecodingStart = false;
+  bool isRecodingStart;
   Function(bool) isAudioPreview;
   Function(AudioPlayer) player;
 
@@ -144,9 +144,11 @@ class _AudioSelectorsState extends State<AudioSelectors>
               initialPage: _currentTrackIndex,
               enableInfiniteScroll: false,
               onScrolled: (value) {},
-              onPageChanged: (index, reason) {
-                _onItemChanged(index);
-              },
+              onPageChanged: !widget.isRecodingStart
+                  ? (index, reason) {
+                      _onItemChanged(index);
+                    }
+                  : null,
               autoPlay: false,
             ),
           ),

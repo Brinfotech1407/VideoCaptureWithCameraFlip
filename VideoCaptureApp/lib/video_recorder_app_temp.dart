@@ -182,7 +182,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
               });
             },
             player: (audioPlayer) {
-                player = audioPlayer;
+              player = audioPlayer;
             },
           ),
         ],
@@ -284,7 +284,6 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
           onVideoRecordButtonPressed();
 
           startTimer();
-
         } else {
           //onStopButtonPressed();
         }
@@ -362,8 +361,8 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
         setState(() {});
       }
     });
-    await  player.stop();
-   player.play();
+    await player.stop();
+    player.play();
   }
 
   void onStopButtonPressed() {
@@ -406,6 +405,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
       _showCameraException(e);
       return;
     }
+    setState(() {});
   }
 
   void stopRecordingAfter30Seconds() {
