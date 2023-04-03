@@ -48,7 +48,11 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
       return;
     }
 
-    if (state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
+      myDuration = const Duration(seconds: 30);
+      countdownTimer?.cancel();
+      player.stop();
+      isRecodingStart = false;
       cameraController.dispose();
     } else if (state == AppLifecycleState.resumed) {
       print("Camera controlller");
