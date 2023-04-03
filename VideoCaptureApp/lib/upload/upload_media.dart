@@ -6,9 +6,10 @@ import 'package:path/path.dart';
 import 'package:video_recording_app/upload/firebase_api.dart';
 
 class MediaUploadView extends StatefulWidget {
-  MediaUploadView(this.mediaPath, {super.key});
+  MediaUploadView({required this.mediaPath, required this.uploadProgress});
 
   String mediaPath;
+  Function(String) uploadProgress;
 
   @override
   _MediaUploadViewState createState() => _MediaUploadViewState();
@@ -58,8 +59,9 @@ class _MediaUploadViewState extends State<MediaUploadView> {
           if (snapshot.hasData) {
             final snap = snapshot.data!;
             final progress = snap.bytesTransferred / snap.totalBytes;
-            final percentage = (progress * 100).toStringAsFixed(2);
-            print('progress: $progress ($percentage)');
+            final  percentage = (progress * 100).toStringAsFixed(2);
+
+            widget.uploadProgress(percentage);
 
             return Column(
               children: [

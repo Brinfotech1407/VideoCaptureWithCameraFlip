@@ -30,6 +30,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
   bool isMusicPlaying = true;
   late AudioPlayer player;
   int currentAudioPlayingIndex = 0;
+  ValueNotifier<String> uploadProgress = ValueNotifier('');
 
   @override
   void initState() {
@@ -158,18 +159,34 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             height: double.infinity,
             child: _cameraPreviewWidget(),
           ),
-          if (videoFile != null && videoFile!.path.isNotEmpty) ...<Widget>[
-            Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                  color: Colors.white,
-                  padding: const EdgeInsets.all(6),
-                  margin: const EdgeInsets.only(left: 30, top: 50),
-                  height: 100,
-                  width: 150,
-                  child: MediaUploadView(videoFile!.path)),
-            ),
-          ],
+          ValueListenableBuilder(valueListenable: uploadProgress,
+              builder: (context, value, child) {
+                if (value == '100.00') {
+                  return const SizedBox();
+                } else {
+                if (videoFile != null && videoFile!.path.isNotEmpty) {
+                  return Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                        color: Colors.white,
+                        padding: const EdgeInsets.all(6),
+                        margin: const EdgeInsets.only(left: 30, top: 50),
+                        height: 100,
+                        width: 150,
+                        child: MediaUploadView(
+                          mediaPath: videoFile!.path,
+                          uploadProgress: (progress) {
+                            uploadProgress.value = progress;
+                            print('progress per: $progress');
+                          },
+                        )),
+                  );
+                }
+                }
+                return const SizedBox();
+              },
+          ),
+
           _cameraTogglesRowWidget(),
           if (controller != null &&
               controller!.value.isInitialized &&
