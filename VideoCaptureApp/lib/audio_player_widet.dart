@@ -84,9 +84,9 @@ class _AudioSelectorsState extends State<AudioSelectors>
             itemBuilder: (BuildContext context, int index, int realIndex) {
               return GestureDetector(
                 onTap: () {
-                  print(
-                      'Index $index realIndex $realIndex, currentIndex $_currentTrackIndex');
-                  if (_currentTrackIndex == index && player.playing) {
+                  if (!widget.isRecodingStart &&
+                      _currentTrackIndex == index &&
+                      player.playing) {
                     _currentTrackIndex = 0;
                     player.stop();
                     if (mounted) {
