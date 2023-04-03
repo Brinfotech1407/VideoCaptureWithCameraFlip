@@ -27,7 +27,6 @@ class _MediaUploadViewState extends State<MediaUploadView> {
 
   @override
   Widget build(BuildContext context) {
-
     return task != null ? buildUploadStatus(task!) : Container();
   }
 
@@ -53,7 +52,6 @@ class _MediaUploadViewState extends State<MediaUploadView> {
 
     print('Download-Link: $urlDownload');
     widget.uploadProgress('100.00');
-
   }
 
   Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
@@ -62,17 +60,26 @@ class _MediaUploadViewState extends State<MediaUploadView> {
           if (snapshot.hasData) {
             final snap = snapshot.data!;
             final progress = snap.bytesTransferred / snap.totalBytes;
-            final  percentage = (progress * 100).toStringAsFixed(2);
+            final percentage = (progress * 100).toStringAsFixed(2);
 
             return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Center(child: CircularProgressIndicator()),
-                Container(
-                  margin: const EdgeInsets.only(top: 15),
-                  child: Text(
-                    '$percentage %',
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                     const CircularProgressIndicator(),
+                    const SizedBox(width: 8,),
+                    Container(
+                     // margin: const EdgeInsets.only(top: 15),
+                      child: Text(
+                        '$percentage %',
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             );

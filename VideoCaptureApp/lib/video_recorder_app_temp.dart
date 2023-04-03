@@ -171,14 +171,13 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
                     child: Container(
                         color: Colors.white,
                         padding: const EdgeInsets.all(6),
-                        margin: const EdgeInsets.only(left: 30, top: 50),
+                        margin: const EdgeInsets.only(left: 30, top: 100,right: 30),
                         height: 100,
-                        width: 150,
+                        width: double.infinity,
                         child: MediaUploadView(
                           mediaPath: videoFile!.path,
                           uploadProgress: (progress) {
                             uploadProgress.value = progress;
-                            print('progress per: $progress');
                           },
                         )),
                   );
