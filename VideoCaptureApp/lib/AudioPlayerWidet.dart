@@ -8,9 +8,10 @@ import 'audio_utils.dart';
 class AudioSelectors extends StatefulWidget {
   bool isRecodingStart = false;
   Function(bool) isAudioPreview;
+  Function(AudioPlayer) player;
 
   AudioSelectors(
-      {super.key, required this.isRecodingStart, required this.isAudioPreview});
+      {super.key, required this.isRecodingStart, required this.isAudioPreview,required this.player});
 
   @override
   _AudioSelectorsState createState() => _AudioSelectorsState();
@@ -43,6 +44,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
     // TODO: implement initState
     super.initState();
     intiAudioPlayer();
+    widget.player(player);
   }
 
   void intiAudioPlayer() {

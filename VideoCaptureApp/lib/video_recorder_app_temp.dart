@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:video_recording_app/AudioPlayerWidet.dart';
 import 'package:video_recording_app/upload/upload_media.dart';
 
@@ -26,6 +27,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
   int selectedCamera = 0;
   bool isRecodingStart = false;
   bool isMusicPlaying = true;
+  late AudioPlayer player;
 
   @override
   void initState() {
@@ -154,7 +156,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
               controller!.value.isInitialized &&
               controller!.value.isRecordingVideo) ...<Widget>[
             Container(
-              margin:  const EdgeInsets.only(bottom:155.0),
+              margin: const EdgeInsets.only(bottom: 155.0),
               child: Text(
                 '$minutes:$seconds',
                 style: const TextStyle(
@@ -165,7 +167,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             ),
           ],
           Container(
-            margin: const EdgeInsets.only(bottom:70),
+            margin: const EdgeInsets.only(bottom: 70),
             child: Padding(
               padding: const EdgeInsets.all(5.0),
               child: _captureControlRowWidget(),
@@ -177,6 +179,9 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
               setState(() {
                 isMusicPlaying = value;
               });
+            },
+            player: (audioPlayer) {
+                player = audioPlayer;
             },
           ),
         ],
@@ -274,7 +279,9 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             controller!.value.isInitialized &&
             !controller!.value.isRecordingVideo) {
           onVideoRecordButtonPressed();
+
           startTimer();
+
         } else {
           //onStopButtonPressed();
         }
@@ -287,7 +294,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             color: controller != null &&
                     controller!.value.isInitialized &&
                     !controller!.value.isRecordingVideo
-                ? isRecodingStart
+                ? player.playing
                     ? Colors.white
                     : const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5)
                 : Colors.red,
@@ -303,7 +310,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
               color: controller != null &&
                       controller!.value.isInitialized &&
                       !controller!.value.isRecordingVideo
-                  ? isRecodingStart
+                  ? player.playing
                       ? Colors.white
                       : const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5)
                   : Colors.red,
@@ -346,12 +353,14 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
     print("Error $s");
   }
 
-  void onVideoRecordButtonPressed() {
+  Future<void> onVideoRecordButtonPressed() async {
     startVideoRecording().then((_) {
       if (mounted) {
         setState(() {});
       }
     });
+    await  player.stop();
+   player.play();
   }
 
   void onStopButtonPressed() {
