@@ -4,8 +4,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:video_recording_app/AudioPlayerWidet.dart';
 import 'package:video_recording_app/upload/upload_media.dart';
+
+import 'audio_player_widet.dart';
 
 class VideoRecorderTempExample extends StatefulWidget {
   VideoRecorderTempExample(this.cameras, {super.key});
@@ -367,6 +368,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
 
   void onStopButtonPressed() {
     countdownTimer?.cancel();
+    player.stop();
     isRecodingStart = false;
     stopVideoRecording().then((XFile? file) {
       if (mounted) {

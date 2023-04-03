@@ -11,7 +11,10 @@ class AudioSelectors extends StatefulWidget {
   Function(AudioPlayer) player;
 
   AudioSelectors(
-      {super.key, required this.isRecodingStart, required this.isAudioPreview,required this.player});
+      {super.key,
+      required this.isRecodingStart,
+      required this.isAudioPreview,
+      required this.player});
 
   @override
   _AudioSelectorsState createState() => _AudioSelectorsState();
@@ -36,7 +39,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
     }
     if (index != 0) {
       player.play();
-    widget.isAudioPreview(true);
+      widget.isAudioPreview(true);
       player.setAsset(AudioUtils().musicTracks[index]);
     }
   }
@@ -80,12 +83,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
             itemCount: AudioUtils().musicTracks.length,
             itemBuilder: (BuildContext context, int index, int realIndex) {
               return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isAudioPlay = true;
-                  });
-                  playAudio(index);
-                },
+                onTap: null,
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   padding: const EdgeInsets.all(6),
@@ -114,8 +112,9 @@ class _AudioSelectorsState extends State<AudioSelectors>
                         SizedBox(
                           width: 70,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 5.0,left: 1),
+                            padding: const EdgeInsets.only(top: 5.0, left: 1),
                             child: Marquee(
+                              velocity: 25,
                               text: AudioUtils().musicTracksNames[index],
                               style: buildMusicNameStyle(index),
                               scrollAxis: Axis.horizontal,
