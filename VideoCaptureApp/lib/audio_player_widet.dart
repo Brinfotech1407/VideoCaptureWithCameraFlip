@@ -83,7 +83,17 @@ class _AudioSelectorsState extends State<AudioSelectors>
             itemCount: AudioUtils().musicTracks.length,
             itemBuilder: (BuildContext context, int index, int realIndex) {
               return GestureDetector(
-                onTap: null,
+                onTap: () {
+                  print(
+                      'Index $index realIndex $realIndex, currentIndex $_currentTrackIndex');
+                  if (_currentTrackIndex == index && player.playing) {
+                    _currentTrackIndex = 0;
+                    player.stop();
+                    if (mounted) {
+                      setState(() {});
+                    }
+                  }
+                },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   padding: const EdgeInsets.all(6),
@@ -172,5 +182,10 @@ class _AudioSelectorsState extends State<AudioSelectors>
     });
 
     playAudio(index);
+  }
+
+  uncheckCurrentView() {
+    _currentTrackIndex = 0;
+    playAudio(0);
   }
 }
