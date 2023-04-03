@@ -22,7 +22,7 @@ class AudioUtils {
     'assets/images/7.png',
     'assets/images/8.png',
     'assets/images/9.png',
-    'assets/images/10png',
+    'assets/images/10.png',
   ];
 
   List<String> musicTracksNames = [
