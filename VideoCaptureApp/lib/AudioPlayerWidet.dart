@@ -30,9 +30,11 @@ class _AudioSelectorsState extends State<AudioSelectors>
     if (widget.isRecodingStart == false) {
       player.stop();
     }
-    player.play();
+    if (index != 0) {
+      player.play();
 
-    player.setAsset(AudioUtils().musicTracks[index]);
+      player.setAsset(AudioUtils().musicTracks[index]);
+    }
   }
 
   @override
@@ -50,10 +52,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
       onError: (Object e, StackTrace stackTrace) {
         print('A stream error occurred: $e');
       },
-      onDone: () {
-
-      },
-
+      onDone: () {},
     );
   }
 
