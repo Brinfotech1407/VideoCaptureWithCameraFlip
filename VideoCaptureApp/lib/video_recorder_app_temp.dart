@@ -28,7 +28,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
   Duration myDuration = const Duration(seconds: 30);
   int selectedCamera = 0;
   bool isRecodingStart = false;
-  bool isMusicPlaying = true;
+  bool isMusicPlaying = false;
   late AudioPlayer player;
   int currentAudioPlayingIndex = 0;
   ValueNotifier<String> uploadProgress = ValueNotifier('');
@@ -65,6 +65,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
     myDuration = const Duration(seconds: 30);
     player.stop();
     isRecodingStart = false;
+    isMusicPlaying = false;
   }
 
   Future<void> _initializeCameraController(
@@ -339,7 +340,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             color: controller != null &&
                     controller!.value.isInitialized &&
                     !controller!.value.isRecordingVideo
-                ? player.playing && isMusicPlaying
+                ? isMusicPlaying
                     ? Colors.white
                     : const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5)
                 : Colors.red,
@@ -355,7 +356,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
               color: controller != null &&
                       controller!.value.isInitialized &&
                       !controller!.value.isRecordingVideo
-                  ? player.playing && isMusicPlaying
+                  ? isMusicPlaying
                       ? Colors.white
                       : const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5)
                   : Colors.red,
@@ -456,7 +457,8 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
 
   void stopRecordingAfter30Seconds() {
     stopVideoTimer = Timer(
-      const Duration(seconds: 30), () {
+      const Duration(seconds: 30),
+      () {
         onStopButtonPressed();
       },
     );
