@@ -29,6 +29,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
   bool isRecodingStart = false;
   bool isMusicPlaying = true;
   late AudioPlayer player;
+  int currentAudioPlayingIndex = 0;
 
   @override
   void initState() {
@@ -48,7 +49,8 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
       return;
     }
 
-    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused) {
       myDuration = const Duration(seconds: 30);
       countdownTimer?.cancel();
       player.stop();
@@ -156,17 +158,17 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             height: double.infinity,
             child: _cameraPreviewWidget(),
           ),
-          if(videoFile !=null && videoFile!.path.isNotEmpty)...<Widget>[
-          Align(
-            alignment: Alignment.topLeft,
-            child: Container(
-              color: Colors.white,
-              padding: const EdgeInsets.all(6),
-              margin: const EdgeInsets.only(left: 30,top: 50),
-              height: 100,
-              width: 150,
-                child: MediaUploadView(videoFile!.path)),
-          ),
+          if (videoFile != null && videoFile!.path.isNotEmpty) ...<Widget>[
+            Align(
+              alignment: Alignment.topLeft,
+              child: Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.all(6),
+                  margin: const EdgeInsets.only(left: 30, top: 50),
+                  height: 100,
+                  width: 150,
+                  child: MediaUploadView(videoFile!.path)),
+            ),
           ],
           _cameraTogglesRowWidget(),
           if (controller != null &&
@@ -198,7 +200,10 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
               });
             },
             player: (audioPlayer) {
-                player = audioPlayer;
+              player = audioPlayer;
+            },
+            currentIndex: (currentIndex) {
+              currentAudioPlayingIndex = currentIndex;
             },
           ),
         ],
@@ -296,10 +301,11 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
         if (controller != null &&
             controller!.value.isInitialized &&
             !controller!.value.isRecordingVideo) {
-          onVideoRecordButtonPressed();
+          if (currentAudioPlayingIndex != 0) {
+            onVideoRecordButtonPressed();
 
-          startTimer();
-
+            startTimer();
+          }
         } else {
           //onStopButtonPressed();
         }
@@ -312,7 +318,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             color: controller != null &&
                     controller!.value.isInitialized &&
                     !controller!.value.isRecordingVideo
-                ? player.playing
+                ? player.playing && isMusicPlaying
                     ? Colors.white
                     : const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5)
                 : Colors.red,
@@ -328,7 +334,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
               color: controller != null &&
                       controller!.value.isInitialized &&
                       !controller!.value.isRecordingVideo
-                  ? player.playing
+                  ? player.playing && isMusicPlaying
                       ? Colors.white
                       : const Color.fromRGBO(217, 217, 217, 1).withOpacity(0.5)
                   : Colors.red,
@@ -377,8 +383,8 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
         setState(() {});
       }
     });
-    await  player.stop();
-   player.play();
+    await player.stop();
+    player.play();
   }
 
   void onStopButtonPressed() {

@@ -9,11 +9,13 @@ class AudioSelectors extends StatefulWidget {
   bool isRecodingStart = false;
   Function(bool) isAudioPreview;
   Function(AudioPlayer) player;
+  Function(int) currentIndex;
 
   AudioSelectors(
       {super.key,
       required this.isRecodingStart,
       required this.isAudioPreview,
+      required this.currentIndex,
       required this.player});
 
   @override
@@ -181,6 +183,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
   void _onItemChanged(int index) {
     setState(() {
       _currentTrackIndex = index;
+      widget.currentIndex(_currentTrackIndex);
     });
 
     playAudio(index);
