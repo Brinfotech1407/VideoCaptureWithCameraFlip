@@ -6,7 +6,7 @@ import 'package:marquee/marquee.dart';
 import 'audio_utils.dart';
 
 class AudioSelectors extends StatefulWidget {
-  bool isRecodingStart = false;
+  bool isRecodingStart;
   Function(bool) isAudioPreview;
   Function(AudioPlayer) player;
   Function(int) currentIndex;
@@ -99,7 +99,17 @@ class _AudioSelectorsState extends State<AudioSelectors>
             itemCount: AudioUtils().musicTracks.length,
             itemBuilder: (BuildContext context, int index, int realIndex) {
               return GestureDetector(
-                onTap: null,
+                onTap: () {
+                  if (!widget.isRecodingStart &&
+                      _currentTrackIndex == index &&
+                      player.playing) {
+                    _currentTrackIndex = 0;
+                    player.stop();
+                    if (mounted) {
+                      setState(() {});
+                    }
+                  }
+                },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   padding: const EdgeInsets.all(6),
@@ -160,9 +170,11 @@ class _AudioSelectorsState extends State<AudioSelectors>
               initialPage: _currentTrackIndex,
               enableInfiniteScroll: false,
               onScrolled: (value) {},
-              onPageChanged: (index, reason) {
-                _onItemChanged(index);
-              },
+              onPageChanged: !widget.isRecodingStart
+                  ? (index, reason) {
+                      _onItemChanged(index);
+                    }
+                  : null,
               autoPlay: false,
             ),
           ),
@@ -188,4 +200,5 @@ class _AudioSelectorsState extends State<AudioSelectors>
 
     playAudio(index);
   }
+
 }
