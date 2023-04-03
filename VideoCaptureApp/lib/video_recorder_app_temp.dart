@@ -57,7 +57,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
       CameraDescription cameraDescription) async {
     final CameraController cameraController = CameraController(
       cameraDescription,
-      ResolutionPreset.medium,
+      ResolutionPreset.high,
       enableAudio: true,
       imageFormatGroup: ImageFormatGroup.jpeg,
     );
@@ -210,7 +210,9 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
       return Align(
         alignment: Alignment.topRight,
         child: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            _onSwitchCamera(1);
+          },
           child: Padding(
             padding: const EdgeInsets.only(right: 14, top: 45),
             child: IconButton(
