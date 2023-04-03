@@ -24,6 +24,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
   CameraController? controller;
   XFile? videoFile;
   Timer? countdownTimer;
+  Timer? stopVideoTimer;
   Duration myDuration = const Duration(seconds: 30);
   int selectedCamera = 0;
   bool isRecodingStart = false;
@@ -50,17 +51,20 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
       return;
     }
 
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.paused) {
-      myDuration = const Duration(seconds: 30);
-      countdownTimer?.cancel();
-      player.stop();
-      isRecodingStart = false;
-      cameraController.dispose();
+    if (state == AppLifecycleState.inactive) {
+      disposeAllCapture(cameraController);
     } else if (state == AppLifecycleState.resumed) {
-      print("Camera controlller");
       _initializeCameraController(cameraController.description);
     }
+  }
+
+  void disposeAllCapture(CameraController cameraController) {
+    cameraController.dispose();
+    countdownTimer?.cancel();
+    stopVideoTimer?.cancel();
+    myDuration = const Duration(seconds: 30);
+    player.stop();
+    isRecodingStart = false;
   }
 
   Future<void> _initializeCameraController(
@@ -406,6 +410,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
 
   void onStopButtonPressed() {
     countdownTimer?.cancel();
+    stopVideoTimer?.cancel();
     player.stop();
     isRecodingStart = false;
     stopVideoRecording().then((XFile? file) {
@@ -446,12 +451,16 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
       _showCameraException(e);
       return;
     }
+    setState(() {});
   }
 
   void stopRecordingAfter30Seconds() {
-    Future.delayed(const Duration(seconds: 30), () {
-      onStopButtonPressed();
-    });
+    stopVideoTimer = Timer(
+      const Duration(seconds: 30), () {
+        onStopButtonPressed();
+      },
+    );
+    // Future.delayed(const Duration(seconds: 30), () {});
   }
 
   Future<XFile?> stopVideoRecording() async {
