@@ -152,6 +152,18 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             height: double.infinity,
             child: _cameraPreviewWidget(),
           ),
+          if(videoFile !=null && videoFile!.path.isNotEmpty)...<Widget>[
+          Align(
+            alignment: Alignment.topLeft,
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.all(6),
+              margin: const EdgeInsets.only(left: 30,top: 50),
+              height: 100,
+              width: 150,
+                child: MediaUploadView(videoFile!.path)),
+          ),
+          ],
           _cameraTogglesRowWidget(),
           if (controller != null &&
               controller!.value.isInitialized &&
@@ -264,7 +276,6 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
       case CameraLensDirection.external:
         return Icons.camera;
     }
-    return Icons.camera;
   }
 
   Future<void> onNewCameraSelected(CameraDescription cameraDescription) async {
@@ -378,10 +389,10 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
         showInSnackBar('Video recorded to ${file.path}');
         videoFile = file;
         myDuration = const Duration(seconds: 30);
-        Navigator.push(
+        /*Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => MediaUploadView(file.path)),
-        );
+        );*/
       }
     });
   }

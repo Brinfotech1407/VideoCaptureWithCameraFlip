@@ -26,25 +26,8 @@ class _MediaUploadViewState extends State<MediaUploadView> {
 
   @override
   Widget build(BuildContext context) {
-    final fileName = file != null ? basename(file!.path) : 'No File Selected';
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Upload'),
-        centerTitle: true,
-      ),
-      body: Container(
-        padding: EdgeInsets.all(32),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              task != null ? buildUploadStatus(task!) : Container(),
-            ],
-          ),
-        ),
-      ),
-    );
+    return task != null ? buildUploadStatus(task!) : Container();
   }
 
   Future selectFile() async {
@@ -76,15 +59,16 @@ class _MediaUploadViewState extends State<MediaUploadView> {
             final snap = snapshot.data!;
             final progress = snap.bytesTransferred / snap.totalBytes;
             final percentage = (progress * 100).toStringAsFixed(2);
+            print('progress: $progress ($percentage)');
 
             return Column(
               children: [
-                Center(child: CircularProgressIndicator()),
+                const Center(child: CircularProgressIndicator()),
                 Container(
-                  margin: EdgeInsets.only(top: 15),
+                  margin: const EdgeInsets.only(top: 15),
                   child: Text(
                     '$percentage %',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
