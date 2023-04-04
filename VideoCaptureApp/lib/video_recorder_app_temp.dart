@@ -196,7 +196,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
                 style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 24),
+                    fontSize: 22),
               ),
             ),
           ],
