@@ -411,17 +411,15 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
       if (mounted) {
         setState(() {});
       }
+      player.stop();
+      isRecodingStart = false;
+      isMusicPlaying=false;
       if (file != null) {
         showInSnackBar('Video recorded to ${file.path}');
         videoFile = file;
         myDuration = const Duration(seconds: 30);
         player.stop();
         uploadProgress.value = "0";
-
-        /*Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MediaUploadView(file.path)),
-        );*/
       }
     });
   }
