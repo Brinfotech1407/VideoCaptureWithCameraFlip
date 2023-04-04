@@ -6,28 +6,34 @@ import 'package:path/path.dart';
 import 'package:video_recording_app/upload/firebase_api.dart';
 
 class MediaUploadView extends StatefulWidget {
-  MediaUploadView({required this.mediaPath, required this.uploadProgress});
+  MediaUploadView({
+    required this.mediaPath,
+    required this.uploadProgress,
+    required this.task,
+    required this.updateUploadTask,
+  });
 
   String mediaPath;
   Function(String) uploadProgress;
+  Function(UploadTask) updateUploadTask;
+  UploadTask? task;
 
   @override
   _MediaUploadViewState createState() => _MediaUploadViewState();
 }
 
 class _MediaUploadViewState extends State<MediaUploadView> {
-  UploadTask? task;
   File? file;
 
   @override
   void initState() {
-    // TODO: implement initState
+    super.initState();
     selectFile();
   }
 
   @override
   Widget build(BuildContext context) {
-    return task != null ? buildUploadStatus(task!) : Container();
+    return widget.task != null ? buildUploadStatus(widget.task!) : Container();
   }
 
   Future selectFile() async {
@@ -41,12 +47,15 @@ class _MediaUploadViewState extends State<MediaUploadView> {
     final fileName = basename(file!.path);
     final destination = 'files/$fileName';
 
-    task = FirebaseApi.uploadFile(destination, file!);
+    widget.task = FirebaseApi.uploadFile(destination, file!);
     setState(() {});
 
-    if (task == null) return;
 
-    final snapshot = await task!.whenComplete(() {});
+    if (widget.task == null) return;
+
+    widget.updateUploadTask(widget.task!);
+
+    final snapshot = await widget.task!.whenComplete(() {});
 
     final urlDownload = await snapshot.ref.getDownloadURL();
 
@@ -97,7 +106,6 @@ class _MediaUploadViewState extends State<MediaUploadView> {
                         ),
                       ],
                     ),
-
               ],
             );
           } else {
