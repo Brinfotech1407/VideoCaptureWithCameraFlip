@@ -173,17 +173,12 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
                 if (value == '0') {
                   return Align(
                     alignment: Alignment.center,
-                    child: Container(
-                        color: Colors.white,
-                        padding: const EdgeInsets.all(12),
-                        height: 220,
-                        width: 220,
-                        child: MediaUploadView(
-                          mediaPath: videoFile!.path,
-                          uploadProgress: (progress) {
-                            uploadProgress.value = progress;
-                          },
-                        )),
+                    child: MediaUploadView(
+                      mediaPath: videoFile!.path,
+                      uploadProgress: (progress) {
+                        uploadProgress.value = progress;
+                      },
+                    ),
                   );
                 }
               }
@@ -321,9 +316,11 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
         if (controller != null &&
             controller!.value.isInitialized &&
             !controller!.value.isRecordingVideo) {
+          if(isMusicPlaying) {
             onVideoRecordButtonPressed();
 
             startTimer();
+          }
         } else {
           //onStopButtonPressed();
         }

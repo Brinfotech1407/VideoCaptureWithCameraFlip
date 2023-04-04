@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:video_recording_app/upload/firebase_api.dart';
 
 class MediaUploadView extends StatefulWidget {
@@ -65,38 +67,37 @@ class _MediaUploadViewState extends State<MediaUploadView> {
             return Stack(
               alignment: Alignment.center,
               children: [
-                Container(
-                  height: 180,
-                  width: 180,
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.grey.withOpacity(0.5),
-                      width: 16,
-                    ),
-                    borderRadius: const BorderRadius.all(Radius.circular(100)),
-                  ),
-                ),
-                    const SizedBox(width: 8,),
-                    Column(
+                CircularPercentIndicator(
+                  radius: 80,
+                  lineWidth: 10.0,
+                  animation: true,
+                  percent:double.parse(percentage) / 100,
+                  center: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           '$percentage %',
                           style: const TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.bold),
+                              fontSize: 17, fontWeight: FontWeight.bold,color: Colors.white),
                         ),
                         const Padding(
                           padding: EdgeInsets.only(top: 6),
                           child: Text(
                             '업로드 중입니다',
                             style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                                fontSize: 15, fontWeight: FontWeight.bold,color: Colors.white),
                           ),
                         ),
                       ],
                     ),
+                  ),
+                  backgroundColor:Colors.white.withOpacity(0.5),
+                  circularStrokeCap: CircularStrokeCap.round,
+                  progressColor: Colors.blue,
+                )
 
               ],
             );

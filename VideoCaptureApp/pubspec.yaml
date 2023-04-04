@@ -52,6 +52,7 @@ dependencies:
     # pick file
   file_picker: ^3.0.1
   marquee: ^2.2.3
+  percent_indicator: ^4.2.3
 
 dev_dependencies:
   flutter_test:
