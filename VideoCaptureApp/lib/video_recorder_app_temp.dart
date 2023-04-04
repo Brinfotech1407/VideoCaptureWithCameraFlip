@@ -172,13 +172,12 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
               } else {
                 if (value == '0') {
                   return Align(
-                    alignment: Alignment.topLeft,
+                    alignment: Alignment.center,
                     child: Container(
                         color: Colors.white,
-                        padding: const EdgeInsets.all(6),
-                        margin: const EdgeInsets.only(left: 30, top: 100,right: 30),
-                        height: 100,
-                        width: double.infinity,
+                        padding: const EdgeInsets.all(12),
+                        height: 220,
+                        width: 220,
                         child: MediaUploadView(
                           mediaPath: videoFile!.path,
                           uploadProgress: (progress) {
@@ -202,7 +201,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
                 style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 30),
+                    fontSize: 25),
               ),
             ),
           ],

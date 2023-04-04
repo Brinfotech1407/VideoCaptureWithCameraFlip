@@ -62,25 +62,42 @@ class _MediaUploadViewState extends State<MediaUploadView> {
             final progress = snap.bytesTransferred / snap.totalBytes;
             final percentage = (progress * 100).toStringAsFixed(2);
 
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            return Stack(
+              alignment: Alignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                     const CircularProgressIndicator(),
-                    const SizedBox(width: 8,),
-                    Container(
-                     // margin: const EdgeInsets.only(top: 15),
-                      child: Text(
-                        '$percentage %',
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
+                Container(
+                  height: 180,
+                  width: 180,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey.withOpacity(0.5),
+                      width: 16,
                     ),
-                  ],
+                    borderRadius: const BorderRadius.all(Radius.circular(100)),
+                  ),
                 ),
+                    const SizedBox(width: 8,),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          '$percentage %',
+                          style: const TextStyle(
+                              fontSize: 17, fontWeight: FontWeight.bold),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 6),
+                          child: Text(
+                            '업로드 중입니다',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+
               ],
             );
           } else {
