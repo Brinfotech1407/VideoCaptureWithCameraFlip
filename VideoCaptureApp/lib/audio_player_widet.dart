@@ -138,7 +138,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
                         SizedBox(
                           width: 70,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 5.0, left: 1),
+                            padding: const EdgeInsets.only(top: 5.0, left: 2,right: 2),
                             child: Marquee(
                               velocity: 25,
                               text: AudioUtils().musicTracksNames[index],
@@ -146,6 +146,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
                               scrollAxis: Axis.horizontal,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               accelerationCurve: Curves.linear,
+                              blankSpace:20,
                               decelerationCurve: Curves.easeInOut,
                             ),
                           ),
