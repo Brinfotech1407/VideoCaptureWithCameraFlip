@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:video_recording_app/audio_utils.dart';
 import 'package:video_recording_app/upload/upload_media.dart';
 
 import 'audio_player_widet.dart';
@@ -38,9 +39,23 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     findCameraDevices();
+    intiAudioPlayer();
     // Get the listonNewCameraSelected of available cameras.
     // Then set the first camera as selected.
   }
+
+  Future<void> intiAudioPlayer() async {
+    player = AudioPlayer();
+    await player.setLoopMode(LoopMode.all);
+    player.playbackEventStream.listen(
+          (PlaybackEvent event) {},
+      onError: (Object e, StackTrace stackTrace) {
+        print('A stream error occurred: $e');
+      },
+      onDone: () {},
+    );
+  }
+
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -55,6 +70,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
       disposeAllCapture(cameraController);
     } else if (state == AppLifecycleState.resumed) {
       _initializeCameraController(cameraController.description);
+      intiAudioPlayer();
     }
   }
 
@@ -140,7 +156,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-
+    player.stop();
     super.dispose();
   }
 
@@ -215,13 +231,11 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
           ),
           AudioSelectors(
             isRecodingStart: isRecodingStart,
+            player: player,
             isAudioPreview: (value) {
               setState(() {
                 isMusicPlaying = value;
               });
-            },
-            player: (audioPlayer) {
-              player = audioPlayer;
             },
             currentIndex: (currentIndex) {
               currentAudioPlayingIndex = currentIndex;
@@ -406,6 +420,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
     });
     await player.stop();
     player.play();
+    player.setAsset(AudioUtils().musicTracks[currentAudioPlayingIndex]);
   }
 
   void onStopButtonPressed() {
