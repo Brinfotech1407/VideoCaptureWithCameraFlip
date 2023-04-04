@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:camera/camera.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
@@ -33,6 +34,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
   late AudioPlayer player;
   int currentAudioPlayingIndex = 0;
   ValueNotifier<String> uploadProgress = ValueNotifier('');
+  UploadTask? task;
 
   @override
   void initState() {
@@ -48,14 +50,13 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
     player = AudioPlayer();
     await player.setLoopMode(LoopMode.all);
     player.playbackEventStream.listen(
-          (PlaybackEvent event) {},
+      (PlaybackEvent event) {},
       onError: (Object e, StackTrace stackTrace) {
         print('A stream error occurred: $e');
       },
       onDone: () {},
     );
   }
-
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -78,6 +79,8 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
     cameraController.dispose();
     countdownTimer?.cancel();
     stopVideoTimer?.cancel();
+    uploadProgress.value = '';
+    task?.cancel();
     myDuration = const Duration(seconds: 30);
     player.stop();
     isRecodingStart = false;
@@ -192,10 +195,17 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
                     child: Container(
                         color: Colors.white,
                         padding: const EdgeInsets.all(6),
-                        margin: const EdgeInsets.only(left: 30, top: 100,right: 30),
+                        margin: const EdgeInsets.only(
+                            left: 30, top: 100, right: 30),
                         height: 100,
                         width: double.infinity,
                         child: MediaUploadView(
+                          updateUploadTask: (UploadTask updatedUploadTask) {
+                            if (mounted) {
+                              task = updatedUploadTask;
+                            }
+                          },
+                          task: task,
                           mediaPath: videoFile!.path,
                           uploadProgress: (progress) {
                             uploadProgress.value = progress;
