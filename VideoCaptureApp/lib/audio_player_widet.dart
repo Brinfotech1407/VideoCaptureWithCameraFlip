@@ -102,7 +102,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: _currentTrackIndex == index && player.playing
+                    color: _currentTrackIndex == index && widget.player.playing
                         ? Colors.white
                         : Colors.white30,
                   ),
@@ -175,7 +175,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
       fontSize: 14,
       fontWeight: FontWeight.bold,
       overflow: TextOverflow.ellipsis,
-      color: _currentTrackIndex == index  && player.playing ? Colors.black : Colors.white,
+      color: _currentTrackIndex == index  && widget.player.playing ? Colors.black : Colors.white,
     );
   }
 

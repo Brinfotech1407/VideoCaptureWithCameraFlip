@@ -434,6 +434,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
       if (mounted) {
         setState(() {});
       }
+      isMusicPlaying =false;
       if (file != null) {
         showInSnackBar('Video recorded to ${file.path}');
         videoFile = file;
