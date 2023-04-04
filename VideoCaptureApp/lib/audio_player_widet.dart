@@ -103,6 +103,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
                       _currentTrackIndex == index &&
                       player.playing) {
                     _currentTrackIndex = -1;
+                    widget.isAudioPreview(false);
                     player.stop();
                     if (mounted) {
                       setState(() {});
