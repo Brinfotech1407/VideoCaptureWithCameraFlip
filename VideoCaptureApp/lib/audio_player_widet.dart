@@ -28,7 +28,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
   bool isAudioPlay = false;
   final CarouselController _controller = CarouselController();
   late AudioPlayer player;
-  int _currentTrackIndex = 0;
+  int _currentTrackIndex = -1;
 
   void playAudio(int index) {
     if (player.playing) {
@@ -39,11 +39,10 @@ class _AudioSelectorsState extends State<AudioSelectors>
       widget.isAudioPreview(false);
       player.stop();
     }
-    if (index != 0) {
+
       player.play();
       widget.isAudioPreview(true);
       player.setAsset(AudioUtils().musicTracks[index]);
-    }
   }
 
   @override
@@ -59,7 +58,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
-      _currentTrackIndex =0;
+   //   _currentTrackIndex =0;
       player.stop();
       player.dispose();
     }else if (state == AppLifecycleState.resumed) {
@@ -103,7 +102,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
                   if (!widget.isRecodingStart &&
                       _currentTrackIndex == index &&
                       player.playing) {
-                    _currentTrackIndex = 0;
+                    _currentTrackIndex = -1;
                     player.stop();
                     if (mounted) {
                       setState(() {});
@@ -168,7 +167,6 @@ class _AudioSelectorsState extends State<AudioSelectors>
             options: CarouselOptions(
               height: 40,
               viewportFraction: 0.3,
-              initialPage: _currentTrackIndex,
               enableInfiniteScroll: false,
               onScrolled: (value) {},
               onPageChanged: !widget.isRecodingStart

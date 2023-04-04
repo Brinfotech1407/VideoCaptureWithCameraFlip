@@ -321,11 +321,9 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
         if (controller != null &&
             controller!.value.isInitialized &&
             !controller!.value.isRecordingVideo) {
-          if (currentAudioPlayingIndex != 0) {
             onVideoRecordButtonPressed();
 
             startTimer();
-          }
         } else {
           //onStopButtonPressed();
         }

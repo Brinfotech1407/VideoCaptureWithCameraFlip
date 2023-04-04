@@ -1,7 +1,6 @@
 class AudioUtils {
   List<String> musicTracks = [
     'assets/audio/1.mp3',
-    'assets/audio/1.mp3',
     'assets/audio/2.mp3',
     'assets/audio/3.mp3',
     'assets/audio/4.mp3',
@@ -14,7 +13,6 @@ class AudioUtils {
   ];
 
   List<String> musicImage = [
-    'assets/images/none.png',
     'assets/images/1.png',
     'assets/images/2.png',
     'assets/images/3.png',
@@ -28,7 +26,6 @@ class AudioUtils {
   ];
 
   List<String> musicTracksNames = [
-    'None',
     ' Dark Trap Beat (It Follows You) - Alex Kizenkov',
     ' Fun Life - FASSounds',
     ' Snow - Dubdown',
