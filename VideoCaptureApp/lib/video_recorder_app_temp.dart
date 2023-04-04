@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:camera/camera.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:video_recording_app/audio_utils.dart';
 import 'package:video_recording_app/upload/upload_media.dart';
 
 import 'audio_player_widet.dart';
@@ -32,14 +34,28 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
   late AudioPlayer player;
   int currentAudioPlayingIndex = 0;
   ValueNotifier<String> uploadProgress = ValueNotifier('');
+  UploadTask? task;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     findCameraDevices();
+    intiAudioPlayer();
     // Get the listonNewCameraSelected of available cameras.
     // Then set the first camera as selected.
+  }
+
+  Future<void> intiAudioPlayer() async {
+    player = AudioPlayer();
+    await player.setLoopMode(LoopMode.all);
+    player.playbackEventStream.listen(
+      (PlaybackEvent event) {},
+      onError: (Object e, StackTrace stackTrace) {
+        print('A stream error occurred: $e');
+      },
+      onDone: () {},
+    );
   }
 
   @override
@@ -55,6 +71,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
       disposeAllCapture(cameraController);
     } else if (state == AppLifecycleState.resumed) {
       _initializeCameraController(cameraController.description);
+      intiAudioPlayer();
     }
   }
 
@@ -62,6 +79,8 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
     cameraController.dispose();
     countdownTimer?.cancel();
     stopVideoTimer?.cancel();
+    uploadProgress.value = '';
+    task?.cancel();
     myDuration = const Duration(seconds: 30);
     player.stop();
     isRecodingStart = false;
@@ -140,7 +159,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-
+    player.stop();
     super.dispose();
   }
 
@@ -174,7 +193,12 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
                   return Align(
                     alignment: Alignment.center,
                     child: MediaUploadView(
-                      mediaPath: videoFile!.path,
+                      updateUploadTask: (UploadTask updatedUploadTask) {
+                            if (mounted) {
+                              task = updatedUploadTask;
+                            }
+                          },
+                          task: task,mediaPath: videoFile!.path,
                       uploadProgress: (progress) {
                         uploadProgress.value = progress;
                       },
@@ -209,13 +233,11 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
           ),
           AudioSelectors(
             isRecodingStart: isRecodingStart,
+            player: player,
             isAudioPreview: (value) {
               setState(() {
                 isMusicPlaying = value;
               });
-            },
-            player: (audioPlayer) {
-              player = audioPlayer;
             },
             currentIndex: (currentIndex) {
               currentAudioPlayingIndex = currentIndex;
@@ -400,6 +422,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
     });
     await player.stop();
     player.play();
+    player.setAsset(AudioUtils().musicTracks[currentAudioPlayingIndex]);
   }
 
   void onStopButtonPressed() {
@@ -411,9 +434,6 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
       if (mounted) {
         setState(() {});
       }
-      player.stop();
-      isRecodingStart = false;
-      isMusicPlaying=false;
       if (file != null) {
         showInSnackBar('Video recorded to ${file.path}');
         videoFile = file;

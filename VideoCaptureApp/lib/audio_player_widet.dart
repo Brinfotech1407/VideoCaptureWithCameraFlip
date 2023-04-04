@@ -8,15 +8,16 @@ import 'audio_utils.dart';
 class AudioSelectors extends StatefulWidget {
   bool isRecodingStart;
   Function(bool) isAudioPreview;
-  Function(AudioPlayer) player;
+  AudioPlayer player;
   Function(int) currentIndex;
 
-  AudioSelectors(
-      {super.key,
-      required this.isRecodingStart,
-      required this.isAudioPreview,
-      required this.currentIndex,
-      required this.player});
+  AudioSelectors({
+    super.key,
+    required this.isRecodingStart,
+    required this.isAudioPreview,
+    required this.currentIndex,
+    required this.player,
+  });
 
   @override
   _AudioSelectorsState createState() => _AudioSelectorsState();
@@ -27,22 +28,23 @@ class _AudioSelectorsState extends State<AudioSelectors>
   Map<String, bool> arrCheckedMap = <String, bool>{};
   bool isAudioPlay = false;
   final CarouselController _controller = CarouselController();
-  late AudioPlayer player;
+
+  //late AudioPlayer player;
   int _currentTrackIndex = -1;
 
   void playAudio(int index) {
-    if (player.playing) {
+    if (widget.player.playing) {
       widget.isAudioPreview(false);
-      player.stop();
+      widget.player.stop();
     }
     if (widget.isRecodingStart == false) {
       widget.isAudioPreview(false);
-      player.stop();
+      widget.player.stop();
     }
 
-      player.play();
+      widget.player.play();
       widget.isAudioPreview(true);
-      player.setAsset(AudioUtils().musicTracks[index]);
+      widget. player.setAsset(AudioUtils().musicTracks[index]);
   }
 
   @override
@@ -50,39 +52,24 @@ class _AudioSelectorsState extends State<AudioSelectors>
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    intiAudioPlayer();
-    widget.player(player);
 
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
-   //   _currentTrackIndex =0;
-      player.stop();
-      player.dispose();
-    }else if (state == AppLifecycleState.resumed) {
-      intiAudioPlayer();
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused) {
+   //   _currentTrackIndex = 0;
+    } else if (state == AppLifecycleState.resumed) {
     }
   }
 
-  Future<void> intiAudioPlayer() async {
-    player = AudioPlayer();
-    await player.setLoopMode(LoopMode.all);
-    player.playbackEventStream.listen(
-      (PlaybackEvent event) {},
-      onError: (Object e, StackTrace stackTrace) {
-        print('A stream error occurred: $e');
-      },
-      onDone: () {},
-    );
-  }
+
 
   @override
   void dispose() {
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
-    player.dispose();
   }
 
   @override
@@ -101,10 +88,10 @@ class _AudioSelectorsState extends State<AudioSelectors>
                 onTap: () {
                   if (!widget.isRecodingStart &&
                       _currentTrackIndex == index &&
-                      player.playing) {
+                      widget.player.playing) {
                     _currentTrackIndex = -1;
                     widget.isAudioPreview(false);
-                    player.stop();
+                    widget.player.stop();
                     if (mounted) {
                       setState(() {});
                     }
@@ -134,7 +121,7 @@ class _AudioSelectorsState extends State<AudioSelectors>
                             borderRadius: const BorderRadius.all(
                                 Radius.elliptical(25, 25)),
                           )),
-                      if (player.playing && _currentTrackIndex == index) ...[
+                      if (widget.player.playing && _currentTrackIndex == index) ...[
                         SizedBox(
                           width: 70,
                           child: Padding(
@@ -200,5 +187,4 @@ class _AudioSelectorsState extends State<AudioSelectors>
 
     playAudio(index);
   }
-
 }
