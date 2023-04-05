@@ -166,10 +166,9 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
   @override
   Widget build(BuildContext context) {
     // Step
-    String strDigits(int n) => n.toString().padLeft(2, '0');
+    String strDigits(int n) => n.toString().padLeft(1, '0');
 
     // Step 7
-    final minutes = strDigits(myDuration.inMinutes.remainder(60));
     final seconds = strDigits(myDuration.inSeconds.remainder(60));
 
     return Scaffold(
@@ -210,19 +209,21 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             },
           ),
           _cameraTogglesRowWidget(),
+          if(myDuration.inSeconds.remainder(60) <= 5)...[
           if (controller != null &&
               controller!.value.isInitialized &&
               controller!.value.isRecordingVideo) ...<Widget>[
             Container(
               margin: const EdgeInsets.only(bottom: 155.0),
               child: Text(
-                '$minutes:$seconds',
+                seconds,
                 style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 22),
               ),
             ),
+          ],
           ],
           Container(
             margin: const EdgeInsets.only(bottom: 70),
