@@ -193,11 +193,12 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
                     alignment: Alignment.center,
                     child: MediaUploadView(
                       updateUploadTask: (UploadTask updatedUploadTask) {
-                            if (mounted) {
-                              task = updatedUploadTask;
-                            }
-                          },
-                          task: task,mediaPath: videoFile!.path,
+                        if (mounted) {
+                          task = updatedUploadTask;
+                        }
+                      },
+                      task: task,
+                      mediaPath: videoFile!.path,
                       uploadProgress: (progress) {
                         uploadProgress.value = progress;
                       },
@@ -209,21 +210,21 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
             },
           ),
           _cameraTogglesRowWidget(),
-          if(myDuration.inSeconds.remainder(60) <= 5)...[
-          if (controller != null &&
-              controller!.value.isInitialized &&
-              controller!.value.isRecordingVideo) ...<Widget>[
-            Container(
-              margin: const EdgeInsets.only(bottom: 155.0),
-              child: Text(
-                seconds,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22),
+          if (myDuration.inSeconds.remainder(60) <= 5) ...[
+            if (controller != null &&
+                controller!.value.isInitialized &&
+                controller!.value.isRecordingVideo) ...<Widget>[
+              Container(
+                margin: const EdgeInsets.only(bottom: 155.0),
+                child: Text(
+                  seconds,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22),
+                ),
               ),
-            ),
-          ],
+            ],
           ],
           Container(
             margin: const EdgeInsets.only(bottom: 70),
@@ -339,7 +340,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
         if (controller != null &&
             controller!.value.isInitialized &&
             !controller!.value.isRecordingVideo) {
-          if(isMusicPlaying) {
+          if (isMusicPlaying) {
             onVideoRecordButtonPressed();
 
             startTimer();
@@ -435,7 +436,7 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
       if (mounted) {
         setState(() {});
       }
-      isMusicPlaying =false;
+      isMusicPlaying = false;
       if (file != null) {
         showInSnackBar('Video recorded to ${file.path}');
         videoFile = file;
@@ -510,9 +511,11 @@ class _VideoRecorderTempExampleState extends State<VideoRecorderTempExample>
         }
       }
     } else {
-      for (final CameraDescription cameraDescription in widget.cameras) {
+      for (int i = 0; i < widget.cameras.length; i++) {
+        CameraDescription cameraDescription = widget.cameras[i];
         if (cameraDescription.lensDirection == CameraLensDirection.front) {
           onNewCameraSelected(cameraDescription);
+          break;
         }
       }
     }
