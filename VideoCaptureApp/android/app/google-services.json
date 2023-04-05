@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "398735695305",
-    "project_id": "videorecordapp",
-    "storage_bucket": "videorecordapp.appspot.com"
+    "project_number": "924754835054",
+    "project_id": "videocaptureapp-170a2",
+    "storage_bucket": "videocaptureapp-170a2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:398735695305:android:db173000b799a54609dc18",
+        "mobilesdk_app_id": "1:924754835054:android:d29daea66169c188e1187f",
         "android_client_info": {
           "package_name": "com.example.video_recording_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "398735695305-6jvh84f4m7vrf2e9f4vm2bnhpc77p2i4.apps.googleusercontent.com",
+          "client_id": "924754835054-23p2abntipf75of52112dp0bqvmk5tff.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBsxDhhTlhy4j4a_HiPrim-ypZc-YvD9RU"
+          "current_key": "AIzaSyA0jmLZQ6H0zyDXemuwYEXD3li0GQ_HbeA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "398735695305-6jvh84f4m7vrf2e9f4vm2bnhpc77p2i4.apps.googleusercontent.com",
+              "client_id": "924754835054-23p2abntipf75of52112dp0bqvmk5tff.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
